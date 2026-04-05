@@ -40,7 +40,7 @@ watch(
     <div class="chat-header">
       <div>
         <div class="chat-kicker">Conversation active</div>
-        <div class="chat-title">Assistant IA 🤖</div>
+        <div class="chat-title">Assistant IA</div>
       </div>
       <div class="chip">{{ modelLabel }}</div>
     </div>
