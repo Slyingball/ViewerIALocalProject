@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
-const API_BASE = 'http://localhost:5000'
+// In dev (Vite proxy), requests go to same origin. In prod (served by Flask), same thing.
+const API_BASE = ''
 
 export interface Model {
   name: string
@@ -12,6 +13,15 @@ export interface Model {
 export interface HistoryItem {
   question: string
   answer: string
+}
+
+export interface PromptData {
+  name: string
+  icon: string
+  content: string
+  is_default: boolean
+  created_at: string
+  updated_at: string
 }
 
 export function useApi() {
@@ -108,6 +118,43 @@ export function useApi() {
     }
   }
 
+  // --- Prompts CRUD ---
+
+  async function getPrompts(): Promise<Record<string, PromptData>> {
+    try {
+      return await fetchJson<Record<string, PromptData>>('/prompts')
+    } catch (e: any) {
+      error.value = e.message
+      return {}
+    }
+  }
+
+  async function createOrUpdatePrompt(payload: {
+    id: string
+    name: string
+    content: string
+    icon: string
+  }): Promise<{ message: string; prompt: PromptData; id: string }> {
+    return await fetchJson('/prompts', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+  }
+
+  async function deletePrompt(promptId: string): Promise<{ message: string }> {
+    return await fetchJson(`/prompts/${promptId}`, {
+      method: 'DELETE',
+    })
+  }
+
+  async function duplicatePrompt(
+    promptId: string,
+  ): Promise<{ message: string; prompt: PromptData; id: string }> {
+    return await fetchJson(`/prompts/${promptId}/duplicate`, {
+      method: 'POST',
+    })
+  }
+
   return {
     loading,
     error,
@@ -116,5 +163,9 @@ export function useApi() {
     getHistory,
     clearHistory,
     clearAllHistory,
+    getPrompts,
+    createOrUpdatePrompt,
+    deletePrompt,
+    duplicatePrompt,
   }
 }
