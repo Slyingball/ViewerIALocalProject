@@ -61,7 +61,7 @@ defineExpose({ insertPrompt })
       <!-- Welcome -->
       <div v-if="messages.length === 0" class="welcome-block">
         <div class="welcome-logo">IA</div>
-        <h1 class="welcome-title">Bienvenue sur Multi-IA</h1>
+        <h1 class="welcome-title">Bienvenue</h1>
         <p class="welcome-sub">Choisissez un modèle et posez votre question.</p>
       </div>
 
